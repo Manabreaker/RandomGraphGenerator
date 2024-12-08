@@ -28,7 +28,7 @@ HWND g_hWnd = nullptr;
 void GenerateNewGraph(HWND hWnd) {
     // Переключаемся на нужный тип графа
     g_currentGraph = g_params.directed ?
-        (Graph*)&g_directedGraph : (Graph*)&g_undirectedGraph;
+        static_cast<Graph *>(&g_directedGraph) : static_cast<Graph *>(&g_undirectedGraph);
 
     g_currentGraph->GenerateRandom(
         g_params.minV, g_params.maxV,
@@ -49,7 +49,7 @@ void GenerateNewGraph(HWND hWnd) {
 
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE, LPSTR, int nCmdShow) {
     g_hInst = hInstance;
-    const TCHAR szAppName[] = TEXT("RandomGraphApp");
+    constexpr TCHAR szAppName[] = TEXT("RandomGraphApp");
 
     WNDCLASS wc = {0};
     wc.style = CS_HREDRAW|CS_VREDRAW;
@@ -57,7 +57,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE, LPSTR, int nCmdShow) {
     wc.hInstance = hInstance;
     wc.hIcon = LoadIcon(nullptr,IDI_APPLICATION);
     wc.hCursor = LoadCursor(nullptr,IDC_ARROW);
-    wc.hbrBackground = (HBRUSH)GetStockObject(WHITE_BRUSH);
+    wc.hbrBackground = static_cast<HBRUSH>(GetStockObject(WHITE_BRUSH));
     wc.lpszClassName = szAppName;
 
     if(!RegisterClass(&wc)) {
@@ -79,7 +79,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE, LPSTR, int nCmdShow) {
 
     // Изначально генерируем граф
     g_currentGraph = g_params.directed ?
-        (Graph*)&g_directedGraph : (Graph*)&g_undirectedGraph;
+        static_cast<Graph *>(&g_directedGraph) : static_cast<Graph *>(&g_undirectedGraph);
     g_currentGraph->GenerateRandom(
         g_params.minV, g_params.maxV,
         g_params.minE, g_params.maxE,
@@ -99,16 +99,16 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE, LPSTR, int nCmdShow) {
         TranslateMessage(&msg);
         DispatchMessage(&msg);
     }
-    return (int)msg.wParam;
+    return static_cast<int>(msg.wParam);
 }
 
 INT_PTR CALLBACK ParamDlgProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam) {
     switch(message) {
     case WM_INITDIALOG:
-        SetDlgItemInt(hDlg, IDC_EDIT_MINV, (UINT)g_params.minV, FALSE);
-        SetDlgItemInt(hDlg, IDC_EDIT_MAXV, (UINT)g_params.maxV, FALSE);
-        SetDlgItemInt(hDlg, IDC_EDIT_MINE, (UINT)g_params.minE, FALSE);
-        SetDlgItemInt(hDlg, IDC_EDIT_MAXE, (UINT)g_params.maxE, FALSE);
+        SetDlgItemInt(hDlg, IDC_EDIT_MINV, static_cast<UINT>(g_params.minV), FALSE);
+        SetDlgItemInt(hDlg, IDC_EDIT_MAXV, static_cast<UINT>(g_params.maxV), FALSE);
+        SetDlgItemInt(hDlg, IDC_EDIT_MINE, static_cast<UINT>(g_params.minE), FALSE);
+        SetDlgItemInt(hDlg, IDC_EDIT_MAXE, static_cast<UINT>(g_params.maxE), FALSE);
         CheckDlgButton(hDlg, IDC_CHECK_DIRECTED, g_params.directed ? BST_CHECKED : BST_UNCHECKED);
         CheckDlgButton(hDlg, IDC_CHECK_WEIGHTED, g_params.weighted ? BST_CHECKED : BST_UNCHECKED);
         return (INT_PTR)TRUE;
