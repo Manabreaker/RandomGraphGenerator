@@ -52,7 +52,7 @@ ProjectRoot/
 
 2. **Клонируйте репозиторий** (если ещё не клонирован):
     ```bash
-    git clone https://github.com/yourusername/RandomGraphGenerator.git
+    git clone https://github.com/Manabreaker/RandomGraphGenerator.git
     cd RandomGraphGenerator
     ```
 
@@ -74,6 +74,9 @@ ProjectRoot/
       - Укажите папку для сборки.
       - Нажмите "Configure", затем "Generate" и откройте решение в Visual Studio.
       - Соберите проект в Visual Studio.
+    - Для **Windiws** (с помощью CLion):
+      - Откройте папку как проект CLion.
+      - Скомпилируйте программу.
 
 ---
 
